@@ -1,9 +1,12 @@
 import { SignIn, SignInButton, SignOutButton } from "@clerk/clerk-react";
 import { useUser } from "@clerk/nextjs";
 import Head from "next/head";
+import { api } from "~/utils/api";
 
 export default function Home() {
   const user = useUser();
+
+  const {data} = api.posts.getAll.useQuery();
   return (
     <>
       <Head>
@@ -12,10 +15,30 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
+        <div>
         {!user.isSignedIn && <SignInButton />}
+        {user.isSignedIn && <CreatePostWizard />}
         {!!user.isSignedIn && <SignOutButton />}
+        </div>
+        <div>
+          {data?.map((post) => (
+            <div key={post.id}>{post.content}</div>
+          ))}
+        </div>
       </main>
     </>
   );
+}
+
+const CreatePostWizard = () => {
+  const {user} = useUser();
+
+  if(!user) return null;
+
+  return (
+    <div className="flex w-full gap-3">
+      <img src={user.profileImageUrl} alt="Profile image" className="h-14 w-14 rounded-full" />
+      <input placeholder="Type someone emo" className="grow bg-transparent outline-none" />
+    </div>
+  )
 }
