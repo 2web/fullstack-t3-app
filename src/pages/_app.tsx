@@ -1,25 +1,13 @@
-import { type Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
-import { type AppType } from "next/app";
-
+import "~/styles/globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
+import { AppType } from "next/app";
 import { api } from "~/utils/api";
 
-import "~/styles/globals.css";
-
-const MyApp: AppType<{ session: Session | null }> = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
+const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <SessionProvider 
-      session={session}
-      // Re-fetch session every 5 minutes
-      // refetchInterval={5 * 60}
-      // Re-fetches session when window is focused
-      // refetchOnWindowFocus={true}
-    >
+    <ClerkProvider {...pageProps}>
       <Component {...pageProps} />
-    </SessionProvider>
+    </ClerkProvider>
   );
 };
 
