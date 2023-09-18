@@ -1,11 +1,12 @@
 import "~/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import { AppType } from "next/app";
+import { type AppType } from "next/app";
 import { api } from "~/utils/api";
+import { ruRU } from "@clerk/localizations";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <ClerkProvider {...pageProps}>
+    <ClerkProvider localization={ruRU} {...pageProps}>
       <Component {...pageProps} />
     </ClerkProvider>
   );
